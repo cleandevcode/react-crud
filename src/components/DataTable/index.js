@@ -4,19 +4,18 @@ import React from "react";
 import "./style.scss";
 
 // Images
-import PlaceholderImg from "../../img/placeholder-user.jpg";
+
 import SortIcon from "../../img/sort-icon.png";
 
-const DataTable = props => {
+const DataTable = (props) => {
   return (
     <div className="table-wrapper">
       <table className="data-table">
         <thead>
           <tr>
-            <th></th>
             <th
               onClick={() => {
-                props.onSortChange("name");
+                props.onSortChange("firstName");
               }}
             >
               <span className="column-sort">
@@ -26,7 +25,7 @@ const DataTable = props => {
             </th>
             <th
               onClick={() => {
-                props.onSortChange("surname");
+                props.onSortChange("lastName");
               }}
             >
               <span className="column-sort">
@@ -44,22 +43,31 @@ const DataTable = props => {
                 <img src={SortIcon} alt="E-Mail" />
               </span>
             </th>
+            <th
+              onClick={() => {
+                props.onSortChange("mobileNumber");
+              }}
+            >
+              <span className="column-sort">
+                Mobile Number
+                <img src={SortIcon} alt="Last Name" />
+              </span>
+            </th>
+            <th>
+              <span className="column-sort">Password</span>
+            </th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {props.users.length ? (
-            props.users.map(user => (
+            props.users.map((user) => (
               <tr key={user.id}>
-                <td className="field-avatar">
-                  <img
-                    src={user.avatar ? user.avatar : PlaceholderImg}
-                    alt={user.first_name}
-                  />
-                </td>
-                <td>{user.first_name}</td>
-                <td>{user.last_name}</td>
+                <td>{user.firstName}</td>
+                <td>{user.lastName}</td>
                 <td>{user.email}</td>
+                <td>{user.mobileNumber}</td>
+                <td>**********</td>
                 <td className="field-actions">
                   <button
                     className="primary-btn"
@@ -69,12 +77,12 @@ const DataTable = props => {
                   >
                     Update
                   </button>
-                  <button
+                  {/* <button
                     className="field-actions__delete"
                     onClick={() => props.deleteRow(user)}
                   >
                     Delete
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))

@@ -4,7 +4,7 @@ import {
   getUsers,
   getCreatedUser,
   getUpdatedUser,
-  getDeletedUser
+  getDeletedUser,
 } from "./app/api";
 
 // Styles
@@ -25,16 +25,16 @@ import MySwal from "./index";
 
 function App() {
   const dispatch = useDispatch();
-  const users = useSelector(state => state.users);
-
+  const users = useSelector((state) => state.users);
   const [loading, setLoading] = useState(false);
 
   const [currentUser, setCurrentUser] = useState({
-    id: null,
-    avatar: null,
-    first_name: "",
-    last_name: "",
-    email: ""
+    id: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    mobileNumber: "",
   });
   const [activeModal, setActiveModal] = useState({ name: "", active: false });
   const [savedUsers, setSavedUsers] = useState(users);
@@ -47,23 +47,23 @@ function App() {
   const currentUsers = users.slice(usersFirstIndex, usersLastIndex);
 
   // Setting up Modal
-  const setModal = modal => {
+  const setModal = (modal) => {
     search("");
     setActiveModal({ name: modal, active: true });
   };
 
   // Pagination
-  const paginate = page => {
+  const paginate = (page) => {
     setCurrentPage(page);
   };
 
   // Search
-  const search = term => {
+  const search = (term) => {
     if (term.length > 2) {
       setCurrentPage(1);
 
-      const results = savedUsers.filter(user =>
-        Object.keys(user).some(key =>
+      const results = savedUsers.filter((user) =>
+        Object.keys(user).some((key) =>
           user[key]
             .toString()
             .toLowerCase()
@@ -78,22 +78,22 @@ function App() {
   };
 
   // Sorting
-  const sorting = key => {
+  const sorting = (key) => {
     setSorted(!sorted);
     switch (key) {
-      case "name":
+      case "firstName":
         const nameSort = [...savedUsers].sort((a, b) => {
           return sorted
-            ? a.first_name.localeCompare(b.first_name, "tr")
-            : b.first_name.localeCompare(a.first_name, "tr");
+            ? a.firstName.localeCompare(b.firstName, "tr")
+            : b.firstName.localeCompare(a.firstName, "tr");
         });
         dispatch({ type: "SET_USERS", data: nameSort });
         return;
-      case "surname":
+      case "lastName":
         const surnameSort = [...savedUsers].sort((a, b) => {
           return sorted
-            ? a.last_name.localeCompare(b.last_name, "tr")
-            : b.last_name.localeCompare(a.last_name, "tr");
+            ? a.lastName.localeCompare(b.lastName, "tr")
+            : b.lastName.localeCompare(a.lastName, "tr");
         });
         dispatch({ type: "SET_USERS", data: surnameSort });
         return;
@@ -105,31 +105,47 @@ function App() {
         });
         dispatch({ type: "SET_USERS", data: emailSort });
         return;
+      case "mobileNumber":
+        const mobileNumberSort = [...savedUsers].sort((a, b) => {
+          return sorted
+            ? a.mobileNumber.localeCompare(b.mobileNumber, "tr")
+            : b.mobileNumber.localeCompare(a.mobileNumber, "tr");
+        });
+        dispatch({ type: "SET_USERS", data: mobileNumberSort });
+        return;
       default:
         break;
     }
   };
 
   // Create User
-  const createUser = async user => {
+  const createUser = async (user) => {
     setActiveModal(false);
     setLoading(true);
 
     try {
-      await getCreatedUser(user).then(res => {
+      await getCreatedUser(user).then((res) => {
         const result = res.data;
         MySwal.fire({
           icon: "success",
-          title: "User created successfully."
-        }).then(() => {
-          dispatch({ type: "CREATE_USER", data: result });
-          setSavedUsers([...users, result]);
-        });
+          title: "User created successfully.",
+        })
+          .then(() => {
+            console.log("creating user----->", result);
+            dispatch({ type: "CREATE_USER", data: result });
+            setSavedUsers([...users, result]);
+          })
+          .catch((err) => {
+            MySwal.fire({
+              icon: "error",
+              title: err.message,
+            });
+          });
       });
     } catch (err) {
       MySwal.fire({
         icon: "error",
-        title: "Failed to create user."
+        title: "Failed to create user.",
       });
     } finally {
       setLoading(false);
@@ -137,15 +153,16 @@ function App() {
   };
 
   // Update User
-  const updateRow = user => {
+  const updateRow = (user) => {
     setModal("Update User");
 
     setCurrentUser({
       id: user.id,
-      avatar: user.avatar,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      password: user.password,
+      mobileNumber: user.mobileNumber,
     });
   };
 
@@ -154,24 +171,25 @@ function App() {
     setLoading(true);
 
     try {
-      await getUpdatedUser(id, updatedUser).then(res => {
+      await getUpdatedUser(id, updatedUser).then((res) => {
         const result = res.data;
+
         MySwal.fire({
           icon: "success",
-          title: "User updated successfully."
+          title: "User updated successfully.",
         }).then(() => {
           dispatch({
             type: "SET_USERS",
-            data: users.map(user =>
+            data: users.map((user) =>
               user.id === id ? Object.assign(user, result) : user
-            )
+            ),
           });
         });
       });
     } catch (err) {
       MySwal.fire({
         icon: "error",
-        title: "Failed to update user."
+        title: "Failed to update user.",
       });
     } finally {
       setLoading(false);
@@ -179,19 +197,20 @@ function App() {
   };
 
   // Delete User
-  const deleteRow = user => {
+  const deleteRow = (user) => {
     setModal("Delete User");
 
     setCurrentUser({
       id: user.id,
-      avatar: user.avatar,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      password: user.password,
+      mobileNumber: user.mobileNumber,
     });
   };
 
-  const deleteUser = async id => {
+  const deleteUser = async (id) => {
     setActiveModal(false);
     setLoading(true);
 
@@ -199,20 +218,20 @@ function App() {
       await getDeletedUser(id).then(() => {
         MySwal.fire({
           icon: "success",
-          title: "User deleted successfully."
+          title: "User deleted successfully.",
         }).then(() => {
           dispatch({
             type: "SET_USERS",
-            data: users.filter(user => user.id !== id)
+            data: users.filter((user) => user.id !== id),
           });
-          setSavedUsers(savedUsers.filter(user => user.id !== id));
+          setSavedUsers(savedUsers.filter((user) => user.id !== id));
           setCurrentPage(1);
         });
       });
     } catch (err) {
       MySwal.fire({
         icon: "error",
-        title: "Failed to delete user."
+        title: "Failed to delete user.",
       });
     } finally {
       setLoading(false);
@@ -225,13 +244,13 @@ function App() {
 
     try {
       await getUsers().then(({ data }) => {
-        setSavedUsers(data.data);
-        dispatch({ type: "SET_USERS", data: data.data });
+        setSavedUsers(data);
+        dispatch({ type: "SET_USERS", data: data });
       });
     } catch (err) {
       MySwal.fire({
         icon: "error",
-        title: "Failed to fetch users."
+        title: "Failed to fetch users.",
       });
     } finally {
       setTimeout(() => {
@@ -254,7 +273,6 @@ function App() {
           ) : (
             <div className="content-wrapper">
               <div className="toolbar">
-                <Search search={search} resetSearch={search} />
                 <button
                   className="primary-btn"
                   onClick={() => setModal("Create User")}
@@ -293,13 +311,13 @@ function App() {
               setActiveModal={setActiveModal}
             />
           )}
-          {activeModal.name === "Delete User" && (
+          {/* {activeModal.name === "Delete User" && (
             <DeleteUser
               currentUser={currentUser}
               deleteUser={deleteUser}
               setActiveModal={setActiveModal}
             />
-          )}
+          )} */}
         </Modal>
       )}
       <Footer />

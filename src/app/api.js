@@ -3,35 +3,44 @@ import axios from "axios";
 const apiURL = process.env.REACT_APP_REQRES_API;
 
 function getUsers() {
-  const response = axios.get(`${apiURL}/users`);
+  const response = axios.get(`${apiURL}/students`);
 
   return response;
 }
 
-function getCreatedUser({ first_name, last_name, email }) {
-  const response = axios.post(`${apiURL}/users`, {
+function getCreatedUser({
+  firstName,
+  lastName,
+  email,
+  password,
+  mobileNumber,
+}) {
+  const response = axios.post(`${apiURL}/students`, {
+    firstName,
+    lastName,
     email,
-    first_name,
-    last_name
+    password,
+    mobileNumber,
   });
 
   return response;
 }
 
 function getUpdatedUser(id, user) {
-  const response = axios.put(`${apiURL}/users/${id}`, {
-    avatar: user.avatar,
+  const response = axios.put(`${apiURL}/students/${id}`, {
     id: id,
     email: user.email,
-    first_name: user.first_name,
-    last_name: user.last_name
+    firstName: user.firstName,
+    lastName: user.lastName,
+    mobileNumber: user.mobileNumber,
+    password: user.password,
   });
 
   return response;
 }
 
 function getDeletedUser(id) {
-  const response = axios.delete(`${apiURL}/users/${id}`);
+  const response = axios.delete(`${apiURL}/students/${id}`);
 
   return response;
 }

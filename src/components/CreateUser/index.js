@@ -1,25 +1,31 @@
 import React, { useState } from "react";
 
-const CreateUser = props => {
-  const initialData = { id: null, first_name: "", last_name: "", email: "" };
+const CreateUser = (props) => {
+  const initialData = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    mobileNumber: "",
+  };
   const [user, setUser] = useState(initialData);
 
-  const onInputChange = event => {
+  const onInputChange = (event) => {
     const { name, value } = event.target;
 
     setUser({ ...user, [name]: value });
   };
 
-  const cancel = event => {
+  const cancel = (event) => {
     event.preventDefault();
     props.setActiveModal({ active: false });
   };
 
   return (
     <form
-      onSubmit={event => {
+      onSubmit={(event) => {
         event.preventDefault();
-        if (!user.first_name || !user.last_name) return;
+        if (!user.firstName || !user.lastName) return;
         props.createUser(user);
       }}
     >
@@ -27,8 +33,8 @@ const CreateUser = props => {
         <label>First Name</label>
         <input
           type="text"
-          name="first_name"
-          value={user.first_name}
+          name="firstName"
+          value={user.firstName}
           onChange={onInputChange}
         />
       </div>
@@ -36,8 +42,8 @@ const CreateUser = props => {
         <label>Last Name</label>
         <input
           type="text"
-          name="last_name"
-          value={user.last_name}
+          name="lastName"
+          value={user.lastName}
           onChange={onInputChange}
         />
       </div>
@@ -47,6 +53,24 @@ const CreateUser = props => {
           type="email"
           name="email"
           value={user.email}
+          onChange={onInputChange}
+        />
+      </div>
+      <div className="form-group">
+        <label>Password</label>
+        <input
+          type="password"
+          name="password"
+          value={user.password}
+          onChange={onInputChange}
+        />
+      </div>
+      <div className="form-group">
+        <label>Mobile Number</label>
+        <input
+          type="number"
+          name="mobileNumber"
+          value={user.mobileNumber}
           onChange={onInputChange}
         />
       </div>

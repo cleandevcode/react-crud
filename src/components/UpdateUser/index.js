@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 
-const UpdateUser = props => {
+const UpdateUser = (props) => {
   const [user, setUser] = useState(props.currentUser);
 
-  const onInputChange = event => {
+  const onInputChange = (event) => {
     const { name, value } = event.target;
 
     setUser({ ...user, [name]: value });
   };
 
-  const cancel = event => {
+  const cancel = (event) => {
     event.preventDefault();
     props.setActiveModal({ active: false });
   };
@@ -20,7 +20,7 @@ const UpdateUser = props => {
 
   return (
     <form
-      onSubmit={event => {
+      onSubmit={(event) => {
         event.preventDefault();
         props.updateUser(user.id, user);
       }}
@@ -29,8 +29,8 @@ const UpdateUser = props => {
         <label>First Name</label>
         <input
           type="text"
-          name="first_name"
-          value={user.first_name}
+          name="firstName"
+          value={user.firstName}
           onChange={onInputChange}
         />
       </div>
@@ -38,8 +38,8 @@ const UpdateUser = props => {
         <label>Last Name</label>
         <input
           type="text"
-          name="last_name"
-          value={user.last_name}
+          name="lastName"
+          value={user.lastName}
           onChange={onInputChange}
         />
       </div>
@@ -49,6 +49,24 @@ const UpdateUser = props => {
           type="email"
           name="email"
           value={user.email}
+          onChange={onInputChange}
+        />
+      </div>
+      <div className="form-group">
+        <label>Mobile Number</label>
+        <input
+          type="number"
+          name="mobileNumber"
+          value={user.mobileNumber}
+          onChange={onInputChange}
+        />
+      </div>
+      <div className="form-group">
+        <label>Password</label>
+        <input
+          type="text"
+          name="password"
+          value={user.password}
           onChange={onInputChange}
         />
       </div>
