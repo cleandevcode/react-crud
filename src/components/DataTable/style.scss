@@ -38,6 +38,8 @@
     }
   }
   .field-actions {
+    display: flex;
+    align-items: center;
     button {
       width: 80px;
       height: 40px;
@@ -52,6 +54,9 @@
     }
     &__delete {
       background-color: var(--danger-color);
+      padding-left: 10px;
+      padding-right: 10px;
+      width: 100px !important;
     }
   }
   .no-record-message {

@@ -8,6 +8,10 @@ import "./style.scss";
 import SortIcon from "../../img/sort-icon.png";
 
 const DataTable = (props) => {
+  const handleViewCourse = (user) => {
+    window.location.href = `/course/user/${user.id}`;
+  };
+
   return (
     <div className="table-wrapper">
       <table className="data-table">
@@ -83,6 +87,12 @@ const DataTable = (props) => {
                   >
                     Delete
                   </button> */}
+                  <button
+                    className="field-actions__delete"
+                    onClick={() => handleViewCourse(user)}
+                  >
+                    View Course
+                  </button>
                 </td>
               </tr>
             ))

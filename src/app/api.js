@@ -26,6 +26,19 @@ function getCreatedUser({
   return response;
 }
 
+function getCourse(id) {
+  const response = axios.get(`${apiURL}/course/student/${id}/course`);
+  return response;
+}
+
+function getCreatedCourse({ studentId, name, description }) {
+  const response = axios.post(`${apiURL}/course/student/${studentId}/course`, {
+    name,
+    description,
+  });
+  return response;
+}
+
 function getUpdatedUser(id, user) {
   const response = axios.put(`${apiURL}/students/${id}`, {
     id: id,
@@ -45,4 +58,11 @@ function getDeletedUser(id) {
   return response;
 }
 
-export { getUsers, getCreatedUser, getUpdatedUser, getDeletedUser };
+export {
+  getUsers,
+  getCreatedUser,
+  getUpdatedUser,
+  getDeletedUser,
+  getCreatedCourse,
+  getCourse,
+};
